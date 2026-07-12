@@ -13,7 +13,7 @@ from Abfahrtstafel import app
 
 logger = getLogger(__name__)
 
-def news(eva_nummer=eva_nummer):
+def news(eva_nummer):
     """
     Sammelt alle aktuellen Störungs- und Infomeldungen (u.a. von zuginfo.nrw)
     für den gesamten Bahnhof aus der fchg-Live-API.
@@ -56,7 +56,7 @@ def news(eva_nummer=eva_nummer):
         logger.error(f"Beim Auslesen der Nachrichten ist ein Fehler aufgetreten {e}")
         return []
 
-def departures(eva_nummer=eva_nummer): # Sinzig ist 8005580
+def departures(eva_nummer): # Sinzig ist 8005580
     jetzt = datetime.now()
 
     datum_aktuell = jetzt.strftime("%y%m%d")
@@ -68,7 +68,6 @@ def departures(eva_nummer=eva_nummer): # Sinzig ist 8005580
     
     url_plan_1 = f"https://iris.noncd.db.de/iris-tts/timetable/plan/{eva_nummer}/{datum_aktuell}/{stunde_aktuell}"
     url_plan_2 = f"https://iris.noncd.db.de/iris-tts/timetable/plan/{eva_nummer}/{datum_naechst}/{stunde_naechst}"
-    print(url_plan_1, url_plan_2)
     url_fchg = f"https://iris.noncd.db.de/iris-tts/timetable/fchg/{eva_nummer}"
     
     try: 
@@ -212,7 +211,6 @@ def departures(eva_nummer=eva_nummer): # Sinzig ist 8005580
         # Abschließend chronologisch sortieren
         departures_list = [z for z in departures_list if z['_sort_time'] >= jetzt]
         departures_list.sort(key=lambda x: x['_sort_time'])
-        print(alle_stops_xml)
         return departures_list
         
     except Exception as e:
