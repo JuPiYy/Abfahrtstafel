@@ -1,13 +1,113 @@
 <!DOCTYPE html>
 <html lang="de">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="30">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>Abfahrtstafel</title>
-    </head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/bootstrap.min.css') }}">
+    <script src="{{ url_for('static', filename='scripts/bootstrap.bundle.min.js') }}"></script>
+    
+    <style>
+        .ticker-wrapper {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+        }
+
+        .ticker-text {
+            display: inline-block;
+            padding-left: 100%;
+            /* 30s ist die Geschwindigkeit. Höher = langsamer, Niedriger = schneller */
+            animation: bahnhofsTicker 30s linear infinite;
+        }
+
+        @keyframes bahnhofsTicker {
+            0% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            100% {
+                transform: translate3d(-100%, 0, 0);
+            }
+        }
+    </style>
+
+    <title>Abfahrtstafel</title>
+</head>
     <body>
-        <h1>Willkommen bei der Abfahrtstafel</h1>
-        <p>Dies ist ein temporärer Platzhalter für die index.html Seite.</p>
+        <div class="container-fluid bg-dark text-light min-vh-100 p-4" data-bs-theme="dark">
+            {% if news %}
+            <div class="sticky-top w-100 bg-danger text-white py-2 rounded-3 shadow-sm mb-3">
+                <div class="ticker-wrapper">
+                    <div class="ticker-text fs-5">
+                        {% for meldung in news %}
+                        &nbsp; {{ meldung }} &nbsp; &nbsp; +++ &nbsp;
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row text-uppercase fw-bold border-bottom border-secondary pb-2 mb-3 fs-6 text-body-secondary">
+                <div class="col-2">Abfahrt</div>
+                <div class="col-2">Linie</div>
+                <div class="col-6">Ziel / Über</div>
+                <div class="col-2 text-end">Gleis</div>
+            </div>
+
+            {% for zug in departures %}
+            <div class="row align-items-center py-3 border-bottom border-secondary">
+
+                <div class="col-2">
+                    {% if zug.ausgefallen %}
+                    <span class="fs-4 fw-bold text-danger text-decoration-line-through">{{ zug.abfahrt_geplant }}</span>
+                    <div class="small fw-bold text-danger">Fahrt fällt aus</div>
+                    {% elif zug.verspaetung > 0 %}
+                    <span class="fs-4 fw-bold text-white-50 text-decoration-line-through">{{ zug.abfahrt_geplant }}</span>
+                    <span class="fs-4 fw-bold text-danger ms-2">{{ zug.abfahrt_tatsaechlich }}</span>
+                    <div class="small fw-bold text-danger">+{{ zug.verspaetung }} Min</div>
+                    {% else %}
+                    <span class="fs-4 fw-bold text-light">{{ zug.abfahrt_geplant }}</span>
+                    <div class="small fw-bold text-success">pünktlich</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-2">
+                    {% if zug.art == "Bus" %}
+                    <span class="badge bg-secondary fs-5 px-3 py-2 fw-bold">Bus</span>
+                    {% elif zug.art == "S" %}
+                    <span class="badge bg-success fs-5 px-3 py-2 fw-bold">S {{ zug.nummer }}</span>
+                    {% elif zug.art in ["RE", "RB", "NX"] %}
+                    <span class="badge bg-danger fs-5 px-3 py-2 fw-bold">{{ zug.art }} {{ zug.nummer }}</span>
+                    {% elif zug.art in ["ICE", "IC", "EC"] %}
+                    <span class="badge bg-light text-danger border border-danger fs-5 px-3 py-2 fw-bold">{{ zug.art }} {{ zug.nummer }}</span>
+                    {% else %}
+                    <span class="badge bg-secondary fs-5 px-3 py-2 fw-bold">{{ zug.art }} {{ zug.nummer }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="col-6">
+                    <span class="fs-4 fw-bold text-light">{{ zug.ziel }}</span>
+                    <div class="small text-truncate text-body-secondary">
+                        {{ zug.route | join(' · ') }}
+                    </div>
+                </div>
+
+                <div class="col-2 text-end">
+                    {% if zug.gleis_tatsaechlich %}
+                    <span class="fs-3 fw-bold text-warning">{{ zug.gleis_tatsaechlich }}</span>
+                    {% else %}
+                    <span class="fs-4 fw-bold text-body-secondary">—</span>
+                    {% endif %}
+                </div>
+
+            </div>
+            {% else %}
+            <div class="row py-5 text-center">
+                <div class="col text-body-secondary fs-4">Aktuell keine Abfahrten verfügbar.</div>
+            </div>
+            {% endfor %}
+        </div>
     </body>
 </html>

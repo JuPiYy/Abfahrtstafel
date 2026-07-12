@@ -13,8 +13,6 @@ from Abfahrtstafel import app
 
 logger = getLogger(__name__)
 
-eva_nummer = str(8000085)
-
 def news(eva_nummer=eva_nummer):
     """
     Sammelt alle aktuellen Störungs- und Infomeldungen (u.a. von zuginfo.nrw)
@@ -70,6 +68,7 @@ def departures(eva_nummer=eva_nummer): # Sinzig ist 8005580
     
     url_plan_1 = f"https://iris.noncd.db.de/iris-tts/timetable/plan/{eva_nummer}/{datum_aktuell}/{stunde_aktuell}"
     url_plan_2 = f"https://iris.noncd.db.de/iris-tts/timetable/plan/{eva_nummer}/{datum_naechst}/{stunde_naechst}"
+    print(url_plan_1, url_plan_2)
     url_fchg = f"https://iris.noncd.db.de/iris-tts/timetable/fchg/{eva_nummer}"
     
     try: 
@@ -86,12 +85,14 @@ def departures(eva_nummer=eva_nummer): # Sinzig ist 8005580
                 stop_id = stop.get('id')
                 dp = stop.find('dp')
                 ar = stop.find('ar')
-                    
-                # Live-Linie ermitteln (z.B. RB26)
-                if dp is not None and dp.get('l'):
-                    live_linien[stop_id] = dp.get('l')
-                elif ar is not None and ar.get('l'):
-                    live_linien[stop_id] = ar.get('l')
+                
+                if dp is None:
+                    continue
+                # Live-Linie ermitteln (Zuerst 'fb' für Busse, sonst 'l')
+                if dp is not None:
+                    live_linien[stop_id] = dp.get('fb') or dp.get('l')
+                elif ar is not None:
+                    live_linien[stop_id] = ar.get('fb') or ar.get('l')
                     
                 # Verspätung erfassen
                 if dp is not None and dp.get('ct') is not None:
@@ -140,15 +141,24 @@ def departures(eva_nummer=eva_nummer): # Sinzig ist 8005580
             print_time = dp.get('pt')
             geplant_zeit = f"{print_time[6:8]}:{print_time[8:10]}"
             
-            # 1. Basis-Daten aus dem Transport-Layer holen
+            # Basis-Zuggattung merken
             zuggattung = tl.get('c', '') if tl is not None else ''
             zug_nr = tl.get('n', '') if tl is not None else ''
             
-            # 2. Prüfen, ob es einen schöneren Echtzeit-Liniennamen gibt (z.B. "S6" statt "S 31645")
+            # Live-Name prüfen
             live_name = live_linien.get(stop_id)
             
-            if live_name:
-                # Wenn wir einen Live-Namen haben (z.B. "RE1" oder "ICE 542"), trennen wir ihn
+            # ABSICHERUNG: Wenn die API im Fahrplan sagt, es ist ein Bus (c="Bus")
+            # oder der Live-Name mit "Bus " beginnt:
+            if zuggattung == "Bus" or (live_name and live_name.startswith("Bus ")):
+                art = "Bus"
+                if live_name:
+                    nummer = live_name.replace("Bus ", "").strip()
+                else:
+                    nummer = live_linien.get(stop_id, zug_nr)
+            
+            # Normaler Ablauf für echte Züge:
+            elif live_name:
                 if ' ' in live_name:
                     art, nummer = live_name.split(' ', 1)
                 else:
@@ -159,7 +169,6 @@ def departures(eva_nummer=eva_nummer): # Sinzig ist 8005580
                     else:
                         art, nummer = live_name, ""
             else:
-                # Fallback: Direkt die getrennten API-Felder nutzen
                 art = zuggattung
                 nummer = zug_nr
             
@@ -201,7 +210,9 @@ def departures(eva_nummer=eva_nummer): # Sinzig ist 8005580
             })
             
         # Abschließend chronologisch sortieren
+        departures_list = [z for z in departures_list if z['_sort_time'] >= jetzt]
         departures_list.sort(key=lambda x: x['_sort_time'])
+        print(alle_stops_xml)
         return departures_list
         
     except Exception as e:
