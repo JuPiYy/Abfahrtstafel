@@ -37,11 +37,43 @@
   <ItemGroup>
     <Folder Include="Abfahrtstafel\" />
     <Folder Include="Abfahrtstafel\static\" />
-    <Folder Include="Abfahrtstafel\static\content\" />
+    <Folder Include="Abfahrtstafel\static\stylesheets\" />
     <Folder Include="Abfahrtstafel\static\scripts\" />
     <Folder Include="Abfahrtstafel\templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-grid.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-grid.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-grid.min.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-grid.min.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-grid.rtl.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-grid.rtl.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-grid.rtl.min.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-grid.rtl.min.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-reboot.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-reboot.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-reboot.min.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-reboot.min.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-reboot.rtl.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-reboot.rtl.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-reboot.rtl.min.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-reboot.rtl.min.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-utilities.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-utilities.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-utilities.min.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-utilities.min.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-utilities.rtl.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-utilities.rtl.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-utilities.rtl.min.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap-utilities.rtl.min.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap.min.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap.min.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap.rtl.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap.rtl.css.map" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap.rtl.min.css" />
+    <Content Include="Abfahrtstafel\static\stylesheets\bootstrap.rtl.min.css.map" />
     <Content Include="requirements.txt" />
     <Content Include="Abfahrtstafel\templates\index.html" />
   </ItemGroup>
