@@ -2,7 +2,10 @@ import requests
 
 import xml.etree.ElementTree as ET
 
-from datetime import datetime
+import re
+
+from datetime import datetime, timedelta
+
 from flask import Flask, render_template, jsonify
 from logging import getLogger
 
@@ -10,7 +13,7 @@ from Abfahrtstafel import app
 
 logger = getLogger(__name__)
 
-eva_nummer = str(8000263)
+eva_nummer = str(8000085)
 
 def news(eva_nummer=eva_nummer):
     """
@@ -57,45 +60,68 @@ def news(eva_nummer=eva_nummer):
 
 def departures(eva_nummer=eva_nummer): # Sinzig ist 8005580
     jetzt = datetime.now()
-    datum = jetzt.strftime("%y%m%d")
-    stunde = jetzt.strftime("%H")
+
+    datum_aktuell = jetzt.strftime("%y%m%d")
+    stunde_aktuell = jetzt.strftime("%H")
+
+    naechste_stunde_dt = jetzt + timedelta(hours=1)
+    datum_naechst = naechste_stunde_dt.strftime("%y%m%d")
+    stunde_naechst = naechste_stunde_dt.strftime("%H")
     
-    url_plan = f"https://iris.noncd.db.de/iris-tts/timetable/plan/{eva_nummer}/{datum}/{stunde}"
+    url_plan_1 = f"https://iris.noncd.db.de/iris-tts/timetable/plan/{eva_nummer}/{datum_aktuell}/{stunde_aktuell}"
+    url_plan_2 = f"https://iris.noncd.db.de/iris-tts/timetable/plan/{eva_nummer}/{datum_naechst}/{stunde_naechst}"
     url_fchg = f"https://iris.noncd.db.de/iris-tts/timetable/fchg/{eva_nummer}"
     
-    try:
+    try: 
         # --- 1. Echtzeitdaten (fchg) abrufen ---
         live_linien = {}
         verspaetungen = {}
-        
+        live_gleise = {}
+        ausfaelle = {}
+            
         res_fchg = requests.get(url_fchg, timeout=5)
         if res_fchg.status_code == 200:
             root_fchg = ET.fromstring(res_fchg.text)
             for stop in root_fchg.findall('s'):
                 stop_id = stop.get('id')
-                dp = stop.find('dp') # Departure
-                ar = stop.find('ar') # Arrival
-                
+                dp = stop.find('dp')
+                ar = stop.find('ar')
+                    
                 # Live-Linie ermitteln (z.B. RB26)
                 if dp is not None and dp.get('l'):
                     live_linien[stop_id] = dp.get('l')
                 elif ar is not None and ar.get('l'):
                     live_linien[stop_id] = ar.get('l')
-                
+                    
                 # Verspätung erfassen
                 if dp is not None and dp.get('ct') is not None:
                     verspaetungen[stop_id] = dp.get('ct')
 
-        # --- 2. Plandaten (plan) abrufen ---
-        res_plan = requests.get(url_plan, timeout=5)
-        if res_plan.status_code != 200:
-            return []
+                if dp is not None and dp.get('cp') is not None:
+                    live_gleise[stop_id] = dp.get('cp')
+
+                # <-- HIER EINFÜGEN
+                if dp is not None and dp.get('v') == 'c':
+                    ausfaelle[stop_id] = True
+
+        # --- 2. Plandaten (plan) für BEIDE Stunden abrufen ---
+        alle_stops_xml = []
+        
+        res_p1 = requests.get(url_plan_1, timeout=5)
+        if res_p1.status_code == 200:
+            root_p1 = ET.fromstring(res_p1.text)
+            alle_stops_xml.extend(root_p1.findall('s'))
+                
+        res_p2 = requests.get(url_plan_2, timeout=5)
+        if res_p2.status_code == 200:
+            root_p2 = ET.fromstring(res_p2.text)
+            alle_stops_xml.extend(root_p2.findall('s'))
             
-        root_plan = ET.fromstring(res_plan.text)
         departures_list = []
+        gesehene_ids = set() # Verhindert doppelte Einträge bei Stundenübergängen
         
         # --- 3. Daten zusammenführen ---
-        for stop in root_plan.findall('s'):
+        for stop in alle_stops_xml:
             dp = stop.find('dp') # Departure
             
             # Ohne Abfahrtsknoten ignorieren
@@ -103,21 +129,39 @@ def departures(eva_nummer=eva_nummer): # Sinzig ist 8005580
                 continue
                 
             stop_id = stop.get('id')
+
+            if stop_id in gesehene_ids:
+                continue
+            gesehene_ids.add(stop_id)
+
             tl = stop.find('tl') # Trip Label
             
             # Geplante Abfahrtszeit ermitteln (Format 'pt': YYMMDDhhmm)
             print_time = dp.get('pt')
             geplant_zeit = f"{print_time[6:8]}:{print_time[8:10]}"
             
-            # Fallback: Konstruktion aus Zuggattung und Zugnummer
-            linie = "Zug"
-            if tl is not None:
-                zuggattung = tl.get('c', '') # z.B. ICE, RE
-                zug_nr = tl.get('n', '')     # z.B. 620, 32035
-                linie = f"{zuggattung} {zug_nr}".strip()
+            # 1. Basis-Daten aus dem Transport-Layer holen
+            zuggattung = tl.get('c', '') if tl is not None else ''
+            zug_nr = tl.get('n', '') if tl is not None else ''
             
-            # Bevorzuge schönere Linie aus Echtzeitdaten (falls vorhanden)
-            linie = live_linien.get(stop_id, linie)
+            # 2. Prüfen, ob es einen schöneren Echtzeit-Liniennamen gibt (z.B. "S6" statt "S 31645")
+            live_name = live_linien.get(stop_id)
+            
+            if live_name:
+                # Wenn wir einen Live-Namen haben (z.B. "RE1" oder "ICE 542"), trennen wir ihn
+                if ' ' in live_name:
+                    art, nummer = live_name.split(' ', 1)
+                else:
+                    import re
+                    match = re.match(r"([a-zA-Z\s]+)([0-9]+)", live_name)
+                    if match:
+                        art, nummer = match.groups()
+                    else:
+                        art, nummer = live_name, ""
+            else:
+                # Fallback: Direkt die getrennten API-Felder nutzen
+                art = zuggattung
+                nummer = zug_nr
             
             # Neue Uhrzeit und Verspätung ermitteln
             time_format = "%y%m%d%H%M"
@@ -135,22 +179,31 @@ def departures(eva_nummer=eva_nummer): # Sinzig ist 8005580
             stationen_string = dp.get('ppth', '')
             route_liste = stationen_string.split('|') if stationen_string else []
             ziel = route_liste[-1] if route_liste else "Unbekannt"
+
+            gleis_geplant = dp.get('pp', '-')
+            gleis_tatsaechlich = live_gleise.get(stop_id, gleis_geplant)
+
+            ist_ausgefallen = ausfaelle.get(stop_id, False)
             
             # Abfahrt zur Liste hinzufügen
             departures_list.append({
-                "linie": linie,
+                "art": art,
+                "nummer": nummer,
                 "ziel": ziel,
-                "gleis": dp.get('pp', '-'),
-                "geplant": geplant_zeit,
-                "tatsaechlich": tatsaechlich.strftime("%H:%M"),
+                "gleis_geplant": dp.get('pp', '-'),
+                "gleis_tatsaechlich": gleis_tatsaechlich,
+                "abfahrt_geplant": geplant_zeit,
+                "abfahrt_tatsaechlich": tatsaechlich.strftime("%H:%M"),
                 "verspaetung": max(0, verspaetung_min),
-                "route": route_liste
+                "ausgefallen": ist_ausgefallen,
+                "route": route_liste,
+                "_sort_time": tatsaechlich
             })
             
         # Abschließend chronologisch sortieren
-        departures_list.sort(key=lambda x: x['geplant'])
+        departures_list.sort(key=lambda x: x['_sort_time'])
         return departures_list
         
-    except Exception:
+    except Exception as e:
         logger.error(f"Beim Abfragen der Abfahrten ist ein Fehler aufgetreten {e}")
         return []
