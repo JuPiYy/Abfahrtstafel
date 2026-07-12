@@ -10,7 +10,52 @@ from Abfahrtstafel import app
 
 logger = getLogger(__name__)
 
-def departures(eva_nummer="8005580"): # Sinzig ist 8005580
+eva_nummer = str(8000263)
+
+def news(eva_nummer=eva_nummer):
+    """
+    Sammelt alle aktuellen Störungs- und Infomeldungen (u.a. von zuginfo.nrw)
+    für den gesamten Bahnhof aus der fchg-Live-API.
+    """
+    url_fchg = f"https://iris.noncd.db.de/iris-tts/timetable/fchg/{eva_nummer}"
+    
+    try:
+        res_fchg = requests.get(url_fchg, timeout=5)
+        if res_fchg.status_code != 200:
+            return []
+            
+        root_fchg = ET.fromstring(res_fchg.text)
+        
+        # Ein Dictionary statt eines Sets nutzen
+        eindeutige_meldungen = {}
+        
+        for m in root_fchg.findall('.//m'):
+            text = m.get('cat')
+            
+            if text and not text.isdigit():
+                # 1. Wir erstellen eine "bereinigte" Version nur zum Vergleichen intern
+                # Hier schneiden wir temporär die Quelle und Punkte ab
+                vergleichs_text = text.split(". (Quelle:")[0].split(" (Quelle:")[0]
+                vergleichs_text = vergleichs_text.strip().rstrip('.')
+                
+                # 2. Logik zum Filtern:
+                # Wenn wir das Thema noch gar nicht kennen, ODER wenn der neue Text 
+                # länger ist (also die Version MIT Quelle darstellt), speichern wir ihn ab.
+                if vergleichs_text not in eindeutige_meldungen:
+                    eindeutige_meldungen[vergleichs_text] = text
+                else:
+                    # Falls der neue Text die Quelle enthält, hat er mehr Zeichen als der alte
+                    if len(text) > len(eindeutige_meldungen[vergleichs_text]):
+                        eindeutige_meldungen[vergleichs_text] = text
+                
+        # Am Ende geben wir nur die echten, längeren Originaltexte zurück
+        return list(eindeutige_meldungen.values())
+        
+    except Exception as e:
+        logger.error(f"Beim Auslesen der Nachrichten ist ein Fehler aufgetreten {e}")
+        return []
+
+def departures(eva_nummer=eva_nummer): # Sinzig ist 8005580
     jetzt = datetime.now()
     datum = jetzt.strftime("%y%m%d")
     stunde = jetzt.strftime("%H")
@@ -107,4 +152,5 @@ def departures(eva_nummer="8005580"): # Sinzig ist 8005580
         return departures_list
         
     except Exception:
+        logger.error(f"Beim Abfragen der Abfahrten ist ein Fehler aufgetreten {e}")
         return []
