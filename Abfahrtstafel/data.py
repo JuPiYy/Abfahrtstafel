@@ -10,7 +10,7 @@ from Abfahrtstafel import app
 
 logger = getLogger(__name__)
 
-def get_departures(eva_nummer="8005580"): # Sinzig ist 8005580
+def departures(eva_nummer="8005580"): # Sinzig ist 8005580
     jetzt = datetime.now()
     datum = jetzt.strftime("%y%m%d")
     stunde = jetzt.strftime("%H")
@@ -74,19 +74,16 @@ def get_departures(eva_nummer="8005580"): # Sinzig ist 8005580
             # Bevorzuge schönere Linie aus Echtzeitdaten (falls vorhanden)
             linie = live_linien.get(stop_id, linie)
             
-            # Verspätung berechnen (Differenz in Minuten)
+            # Neue Uhrzeit und Verspätung ermitteln
+            time_format = "%y%m%d%H%M"
+            print_time_dt = datetime.strptime(print_time, time_format)
+            tatsaechlich = print_time_dt
             verspaetung_min = 0
             
-            # Neue Uhrzeit ermitteln
-            neue_uhrzeit = None
             if stop_id in verspaetungen:
                 changed_time = verspaetungen[stop_id]
-                time_format = "%y%m%d%H%M"
-                neue_uhrzeit = datetime.strptime(changed_time, time_format)
-            
-            if neue_uhrzeit is not None:
-                print_time_dt = datetime.strptime(print_time, "%y%m%d%H%M")
-                diff = neue_uhrzeit - print_time_dt
+                tatsaechlich = datetime.strptime(changed_time, time_format)
+                diff = tatsaechlich - print_time_dt
                 verspaetung_min = int(diff.total_seconds() / 60)
             
             # Route und Zielbahnhof auslesen
@@ -100,6 +97,7 @@ def get_departures(eva_nummer="8005580"): # Sinzig ist 8005580
                 "ziel": ziel,
                 "gleis": dp.get('pp', '-'),
                 "geplant": geplant_zeit,
+                "tatsaechlich": tatsaechlich.strftime("%H:%M"),
                 "verspaetung": max(0, verspaetung_min),
                 "route": route_liste
             })

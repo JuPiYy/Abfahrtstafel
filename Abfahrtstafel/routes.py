@@ -9,4 +9,4 @@ from Abfahrtstafel import data
 
 @app.route('/')
 def start():
-    return data.get_departures()
+    return data.departures()
