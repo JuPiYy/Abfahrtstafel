@@ -1,14 +1,14 @@
 """
 Routes and views for the flask application.
 """
+import logging
 
 from flask import render_template
 
-from Abfahrtstafel import app
-from Abfahrtstafel import data
+from Abfahrtstafel import app, data, settings
 
-from os import environ
+logger = settings.logger
 
 @app.route("/")
 def start():
-    return render_template("index.html", departures=data.departures(eva_nummer=environ.get("EVA_NUMMER")), news=data.news(eva_nummer=environ.get("EVA_NUMMER")))
+    return render_template("index.html", departures=data.departures(), news=data.news())

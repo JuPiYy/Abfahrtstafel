@@ -30,6 +30,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Abfahrtstafel\data.py" />
+    <Compile Include="Abfahrtstafel\config.py" />
     <Compile Include="runserver.py" />
     <Compile Include="Abfahrtstafel\__init__.py" />
     <Compile Include="Abfahrtstafel\routes.py" />

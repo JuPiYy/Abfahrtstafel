@@ -3,22 +3,23 @@ import requests
 import xml.etree.ElementTree as ET
 
 import re
+import logging
 
 from datetime import datetime, timedelta
 
 from flask import Flask, render_template, jsonify
-from logging import getLogger
 
-from Abfahrtstafel import app
+from Abfahrtstafel import app, settings
 
-logger = getLogger(__name__)
+logger = settings.logger
 
-def news(eva_nummer):
+def news():
     """
     Sammelt alle aktuellen Störungs- und Infomeldungen (u.a. von zuginfo.nrw)
     für den gesamten Bahnhof aus der fchg-Live-API.
     """
-    url_fchg = f"https://iris.noncd.db.de/iris-tts/timetable/fchg/{eva_nummer}"
+    eva_nummer = settings.eva_nummer
+    url_fchg = f"{settings.fchg_base_url}/{eva_nummer}"
     
     try:
         res_fchg = requests.get(url_fchg, timeout=5)
@@ -56,7 +57,8 @@ def news(eva_nummer):
         logger.error(f"Beim Auslesen der Nachrichten ist ein Fehler aufgetreten {e}")
         return []
 
-def departures(eva_nummer): # Sinzig ist 8005580
+def departures(): # Sinzig ist 8005580
+    eva_nummer = settings.eva_nummer
     jetzt = datetime.now()
 
     datum_aktuell = jetzt.strftime("%y%m%d")
@@ -66,9 +68,9 @@ def departures(eva_nummer): # Sinzig ist 8005580
     datum_naechst = naechste_stunde_dt.strftime("%y%m%d")
     stunde_naechst = naechste_stunde_dt.strftime("%H")
     
-    url_plan_1 = f"https://iris.noncd.db.de/iris-tts/timetable/plan/{eva_nummer}/{datum_aktuell}/{stunde_aktuell}"
-    url_plan_2 = f"https://iris.noncd.db.de/iris-tts/timetable/plan/{eva_nummer}/{datum_naechst}/{stunde_naechst}"
-    url_fchg = f"https://iris.noncd.db.de/iris-tts/timetable/fchg/{eva_nummer}"
+    url_plan_1 = f"{settings.plan_base_url}/{eva_nummer}/{datum_aktuell}/{stunde_aktuell}"
+    url_plan_2 = f"{settings.plan_base_url}/{eva_nummer}/{datum_naechst}/{stunde_naechst}"
+    url_fchg = f"{settings.fchg_base_url}/{eva_nummer}"
     
     try: 
         # --- 1. Echtzeitdaten (fchg) abrufen ---
@@ -90,6 +92,7 @@ def departures(eva_nummer): # Sinzig ist 8005580
                 # Live-Linie ermitteln (Zuerst 'fb' für Busse, sonst 'l')
                 if dp is not None:
                     live_linien[stop_id] = dp.get('fb') or dp.get('l')
+
                 elif ar is not None:
                     live_linien[stop_id] = ar.get('fb') or ar.get('l')
                     
@@ -108,11 +111,13 @@ def departures(eva_nummer): # Sinzig ist 8005580
         alle_stops_xml = []
         
         res_p1 = requests.get(url_plan_1, timeout=5)
+
         if res_p1.status_code == 200:
             root_p1 = ET.fromstring(res_p1.text)
             alle_stops_xml.extend(root_p1.findall('s'))
                 
         res_p2 = requests.get(url_plan_2, timeout=5)
+
         if res_p2.status_code == 200:
             root_p2 = ET.fromstring(res_p2.text)
             alle_stops_xml.extend(root_p2.findall('s'))
