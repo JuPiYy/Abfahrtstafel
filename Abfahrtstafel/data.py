@@ -1,15 +1,16 @@
 import requests
 
-import xml.etree.ElementTree as ET
-
 import re
 import logging
+
+import xml.etree.ElementTree as ET
 
 from datetime import datetime, timedelta
 
 from flask import Flask, render_template, jsonify
 
-from Abfahrtstafel import app, settings
+from Abfahrtstafel import app
+from Abfahrtstafel.config import settings
 
 logger = settings.logger
 

@@ -14,9 +14,12 @@ class Settings():
 
         if api_base_url:
             self.api_base_url = api_base_url.rstrip('/')
+
         elif legacy_base_url:
             legacy = legacy_base_url.rstrip('/')
+
             self.api_base_url = legacy.rsplit('/fchg', 1)[0] if '/fchg' in legacy else legacy
+
         else:
             self.api_base_url = "https://iris.noncd.db.de/iris-tts/timetable"
 
