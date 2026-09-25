@@ -26,7 +26,7 @@ class Settings():
         self.plan_base_url = f"{self.api_base_url}/plan"
         self.fchg_base_url = f"{self.api_base_url}/fchg"
 
-        self.eva_nummer = environ.get("EVA_NUMMER") if environ.get("EVA_NUMMER") else "8005580"
+        self.eva_nummer = environ.get("EVA_NUMMER") if environ.get("EVA_NUMMER") else "8000000"
 
         if not environ.get("EVA_NUMMER"):
             self.logger.warning(f"Achtung, aktuell ist keine Bahnhofs-ID definiert! Falle zurück auf: {self.eva_nummer} (Sinzig (Rhein))")  # Default: Sinzig

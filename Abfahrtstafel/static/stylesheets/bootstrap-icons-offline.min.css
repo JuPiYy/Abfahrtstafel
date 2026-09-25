@@ -1,0 +1,104 @@
+/*!
+ * Bootstrap Icons v1.11.3 (https://icons.getbootstrap.com/)
+ * Copyright 2019-2024 The Bootstrap Authors
+ * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
+ */
+@font-face {
+    font-display: block;
+    font-family: bootstrap-icons;
+    src: url("data:application/font-woff2;charset=utf-8;base64,d09GMgABAAAAAAu0ABIAAAAACkQAAAtoAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmAAVGRmdE50R0ZVR0ZVSFUucEZVRlVVVFVUVlZVVVVWTVWDSDwOIioKCUgAATgCJAoMHBELCQgBNgIkEiYBBgAEIAWECgeBJwEjGyEJ4L/tgI9k4rZMI0gPVEEKINnKhxDzqSCJl4vMAl10FmzVVCN0qkOyWf8/ARAEoxgvIMhS9MtYaVWKyWjppHqjNEcjMKZnjZnG1GRt1DqVrZXIdFSVqRayrH+XH3vvL+BnCLYS7FUTASMn+/deFgAuBZBc7d+nAJgHAKGBUgBcAgBMV1cBcAEAYKWdnfn7SUoAsL8fgP8fqaqqvvj9/SoFcP8ugP8fAID/A/g/BGIxBQDgvw/w/z9K8rsvBsAVFOCHd6Tv/18PcP8foP9/gf8XQXA10lnfcDfHEPHW+lsmxzWxCDUfzDqVEA4XHhJNIxZR3QJ5x0l+r41k7Wk4MRBz9Wdu/sTJxe7SdRvQbUeZZ2w8ww7z//vf3/+vP+1AAKAAD4Vx+lxAAAcAiImJmQmQEAeAiImJiYmJgBsIiY+If//7EBsImY+IcfzAJgEQBgEQBgET7A8gBjKqmm006VpB+pTp00mj1NA0AnInpaScmgDUmNRo0A0BoABoA0AAABAAIE0NABoABoBoA0BoBoBoBoABoAaBoABoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoABoBoBoBoBoBoBoBoBoABoBoBoBoBoBoBoBoBoBoBoBoABoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoABoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoAgAAVQEAP+AVQFQBUAAAABoA0BoABoABoABoBoBoBoBoBoBoBoBoABoBoBoABoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoABoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoAABoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoAABoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoABoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoABoABoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoABoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoBoB==") format("woff2"),
+             url("data:application/font-woff;charset=utf-8;base64,AAEAAAALAIAAAwAwT1MvMg8SBfMAAADsAAAAYGNtYXApBQDVAAABHAAAAGRnYXNwAAAAEAAAAXAAAAAIAAAAyAAAAAP//AAAAAAUDPwD/AABRBQEhgIAh/2EFBSGAISGBgCEhgIAhgIBhISEhgIAhgIAhgIEhgIAh/2EBAYCBIQ0FAICBAIGBAK
+H/YQUFIYCBgYAhgIAhgIAhgYGBIYCBgYEhISGBgIAh/2GBgYGBISEhgYGBgYGBgYGBgIGBgYGBgYGBgYEhgYGBgYGBgYGBgYGBgYGBgYGBgYGBIsE
+hISEhISEhISEhISEhISEhISEhISEhISEhgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYEhgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYG
+BgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgY
+GBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYG
+BgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYG
+BgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYG
+BgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYG
+BgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYG
+BgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYG
+BgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgI
+CAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgI
+CAgICAgICAg==") format("woff");
+}
+
+.bi::before, [class*=" bi-"]::before, [class^="bi-"]::before {
+    display: inline-block;
+    font-family: bootstrap-icons !important;
+    font-style: normal;
+    font-weight: 400 !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    vertical-align: -.125em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.bi-123::before { content: "\f67f"; }
+.bi-alarm-fill::before { content: "\f101"; }
+.bi-alarm::before { content: "\f102"; }
+.bi-align-bottom::before { content: "\f103"; }
+.bi-align-center::before { content: "\f104"; }
+.bi-align-end::before { content: "\f105"; }
+.bi-align-middle::before { content: "\f106"; }
+.bi-align-start::before { content: "\f107"; }
+.bi-align-top::before { content: "\f108"; }
+.bi-alt::before { content: "\f109"; }
+.bi-app-indicator::before { content: "\f10a"; }
+.bi-app::before { content: "\f10b"; }
+.bi-archive-fill::before { content: "\f10c"; }
+.bi-archive::before { content: "\f10d"; }
+.bi-arrow-down::before { content: "\f128"; }
+.bi-arrow-down-circle::before { content: "\f119"; }
+.bi-arrow-down-circle-fill::before { content: "\f118"; }
+.bi-arrow-down-left::before { content: "\f11e"; }
+.bi-arrow-down-left-circle::before { content: "\f11b"; }
+.bi-arrow-down-left-circle-fill::before { content: "\f11a"; }
+.bi-arrow-down-left-square::before { content: "\f11d"; }
+.bi-arrow-down-left-square-fill::before { content: "\f11c"; }
+.bi-arrow-down-right::before { content: "\f123"; }
+.bi-arrow-down-right-circle::before { content: "\f120"; }
+.bi-arrow-down-right-circle-fill::before { content: "\f11f"; }
+.bi-arrow-down-right-square::before { content: "\f122"; }
+.bi-arrow-down-right-square-fill::before { content: "\f121"; }
+.bi-arrow-down-short::before { content: "\f124"; }
+.bi-arrow-down-square::before { content: "\f126"; }
+.bi-arrow-down-square-fill::before { content: "\f125"; }
+.bi-arrow-down-up::before { content: "\f127"; }
+.bi-arrow-left::before { content: "\f12f"; }
+.bi-arrow-left-circle::before { content: "\f12a"; }
+.bi-arrow-left-circle-fill::before { content: "\f129"; }
+.bi-arrow-left-right::before { content: "\f12b"; }
+.bi-arrow-left-short::before { content: "\f12c"; }
+.bi-arrow-left-square::before { content: "\f12e"; }
+.bi-arrow-left-square-fill::before { content: "\f12d"; }
+.bi-arrow-repeat::before { content: "\f130"; }
+.bi-arrow-return-left::before { content: "\f131"; }
+.bi-arrow-return-right::before { content: "\f132"; }
+.bi-arrow-right::before { content: "\f138"; }
+.bi-arrow-right-circle::before { content: "\f134"; }
+.bi-arrow-right-circle-fill::before { content: "\f133"; }
+.bi-arrow-right-short::before { content: "\f135"; }
+.bi-arrow-right-square::before { content: "\f137"; }
+.bi-arrow-right-square-fill::before { content: "\f136"; }
+.bi-arrow-up::before { content: "\f148"; }
+.bi-arrow-up-circle::before { content: "\f13a"; }
+.bi-arrow-up-circle-fill::before { content: "\f139"; }
+.bi-arrow-up-left::before { content: "\f13f"; }
+.bi-arrow-up-left-circle::before { content: "\f13c"; }
+.bi-arrow-up-left-circle-fill::before { content: "\f13b"; }
+.bi-arrow-up-left-square::before { content: "\f13e"; }
+.bi-arrow-up-left-square-fill::before { content: "\f13d"; }
+.bi-arrow-up-right::before { content: "\f144"; }
+.bi-arrow-up-right-circle::before { content: "\f141"; }
+.bi-arrow-up-right-circle-fill::before { content: "\f140"; }
+.bi-arrow-up-right-square::before { content: "\f143"; }
+.bi-arrow-up-right-square-fill::before { content: "\f142"; }
+.bi-arrow-up-short::before { content: "\f145"; }
+.bi-arrow-up-square::before { content: "\f147"; }
+.bi-arrow-up-square-fill::before { content: "\f146"; }
+.bi-exclamation-triangle::before { content: "\f33a"; }
+.bi-exclamation-triangle-fill::before { content: "\f339"; }
+.bi-info-circle::before { content: "\f467"; }
+.bi-info-circle-fill::before { content: "\f466"; }

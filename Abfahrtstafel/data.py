@@ -221,4 +221,4 @@ def departures(): # Sinzig ist 8005580
         
     except Exception as e:
         logger.error(f"Beim Abfragen der Abfahrten ist ein Fehler aufgetreten {e}")
-        return []
+        return None
